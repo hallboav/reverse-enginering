@@ -3,6 +3,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/ptrace.h>
 
@@ -22,6 +23,9 @@ int main(int argc, char **argv)
     fprintf(stderr, "%s\n", strerror(errno));
     return 2;
   }
+
+  // Esperando tracee parar
+  wait(0);
 
   if (ptrace(PTRACE_DETACH, pid, 0, 0) == -1) {
     fprintf(stderr, "%s\n", strerror(errno));
