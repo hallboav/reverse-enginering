@@ -27,10 +27,23 @@ int main(int argc, char **argv)
   // Esperando tracee parar
   wait(0);
 
-  if (ptrace(PTRACE_DETACH, pid, 0, 0) == -1) {
+  long current_mana = ptrace(PTRACE_PEEKDATA, pid, (void *) MANA_ADDR, 0);
+  if (current_mana == -1) {
     fprintf(stderr, "%s\n", strerror(errno));
     return 3;
   }
 
+  current_mana += 55;
+  if (ptrace(PTRACE_POKEDATA, pid, (void *) MANA_ADDR, (void *) current_mana)) {
+    fprintf(stderr, "%s\n", strerror(errno));
+    return 4;
+  }
+
+  if (ptrace(PTRACE_DETACH, pid, 0, 0) == -1) {
+    fprintf(stderr, "%s\n", strerror(errno));
+    return 5;
+  }
+
+  printf("Done!\n");
   return 0;
 }
