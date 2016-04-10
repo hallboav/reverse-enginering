@@ -1,10 +1,13 @@
 #define _GNU_SOURCE
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <string.h>
 
 #include <sys/uio.h>
+
+#define MANA_ADDR 0x601044
 
 typedef struct iovec iovec_t;
 
@@ -43,5 +46,23 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  // Entrada do usuário não é verificada
+  pid_t pid = strtol(argv[1], 0, 10);
+
+  unsigned int current_mana;
+  ssize_t bytes_read = remote_read32(pid, &current_mana, (void *) MANA_ADDR);
+  if (bytes_read != sizeof current_mana) {
+    fprintf(stderr, "%s\n", strerror(errno));
+    return 2;
+  }
+
+  current_mana += 301;
+  ssize_t bytes_written = remote_write32(pid, &current_mana, (void *) MANA_ADDR);
+  if (bytes_written != sizeof current_mana) {
+    fprintf(stderr, "%s\n", strerror(errno));
+    return 3;
+  }
+
+  printf("Done!\n");
   return 0;
 }
