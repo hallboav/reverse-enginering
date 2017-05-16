@@ -1,11 +1,10 @@
 # readv-writev & ptrace
 
-Ler/escrever valores na memória de outro processo.
+Memory editing.
 
 ### Descrição
 
-No *SO* Windows podemos alterar a memória de outro processo com as funções ``ReadProcessMemory`` e ``WriteProcessMemory``
-que são declaradas na biblioteca ``winbase.h``.
+No *SO* Windows podemos ler e alterar a memória de outro processo usando as funções ``ReadProcessMemory`` e ``WriteProcessMemory`` que são declaradas na biblioteca ``winbase.h``.
 
 ``readv-writev`` e ``ptrace`` são duas soluções econtradas para obter o *mesmo* comportamento nos sistemas Linux.
 
@@ -45,8 +44,7 @@ Onde 14344 é o *PID*.
 
 Você pode usar o ``gdb`` caso seja necessário atualizar o endereço de memória.
 
-Este pode ser visto em comentário (prefixado pelo caractere ``#``) à direita do terminal, pois trata-se de uma
-variável de endereço fixo.
+Este pode ser visto em comentário (prefixado pelo caractere ``#``) à direita do terminal.
 
 ```shell
 gdb target
